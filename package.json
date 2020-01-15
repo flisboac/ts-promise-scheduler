@@ -1,0 +1,27 @@
+{
+  "name": "ts-promise-scheduler",
+  "description": "A simple yet flexible promise-based task scheduler, implemented in TypeScript.",
+  "version": "1.0.0",
+  "author": "Flávio Lisbôa <flisboa.costa@gmail.com>",
+  "repository": "https://github.com/flisboac/ts-promise-scheduler",
+  "main": "dist/main/index.js",
+  "module": "dist/module/index.js",
+  "typings": "dist/main/index.d.ts",
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "compile:main": "tsc --project tsconfig.main.json",
+    "compile:module": "tsc --project tsconfig.module.json",
+    "compile": "yarn compile:main && yarn compile:module"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.16.0",
+    "@typescript-eslint/parser": "^2.16.0",
+    "eslint": "^6.8.0",
+    "typescript": "^3.7.4"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "declaration": true,
+    "rootDir": "./src",
+    "strict": true,
+    "sourceMap": true,
+    "removeComments": true,
+    "esModuleInterop": true,
+  },
+  "include": [
+    "**/*"
+  ]
+}
