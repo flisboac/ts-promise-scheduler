@@ -4,7 +4,7 @@ export enum JobStatus {
     RESOLVED,
     REJECTED,
     CANCELED,
-};
+}
 
 export interface TaskBody<T = any> {
     (...args: any[]): T;
@@ -59,31 +59,32 @@ export class Job<T = any> {
         this._watchers = [];
     }
 
-    get status() {
+    get status(): JobStatus {
         return this._status;
     }
 
-    get pending() {
+    get pending(): boolean {
         return this._status === JobStatus.PENDING;
     }
 
-    get running() {
+    get running(): boolean {
         return this._status === JobStatus.RUNNING;
     }
 
-    get finished() {
+    get finished(): boolean {
         return this._status === JobStatus.RESOLVED
             || this._status === JobStatus.REJECTED
             || this._status === JobStatus.CANCELED;
     }
 
-    watch(watcher: JobWatcher<T>) {
+    watch(watcher: JobWatcher<T>): ThisType<this> {
         this._watchers.push(watcher);
         return this;
     }
 
-    cancel(reason?: any) {
+    cancel(reason?: any): boolean {
         if (this.pending) {
+            /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
             this._onReject!(reason);
             this._status = JobStatus.CANCELED;
             this._notifyChange();
@@ -92,12 +93,12 @@ export class Job<T = any> {
         return false;
     }
 
-    toString() {
+    toString(): string {
         return `[${this.constructor.name}: ${this.id} ${this._scheduler.name}::${this.name}]`;
     }
 
     /** @internal */
-    _execute() {
+    _execute(): void {
         if (this.pending) {
             Promise.resolve()
                 .then(() => {
@@ -106,10 +107,12 @@ export class Job<T = any> {
                     return this._body(...this._args);
                 })
                 .then((result) => {
+                    /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
                     this._onResolve!(result);
                     this._status = JobStatus.RESOLVED;
                     this._notifyChange();
                 }, (reason) => {
+                    /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
                     this._onReject!(reason);
                     this._status = JobStatus.REJECTED;
                     this._notifyChange();
@@ -117,7 +120,7 @@ export class Job<T = any> {
         }
     }
 
-    private _notifyChange() {
+    private _notifyChange(): void {
         this._scheduler._onJobChange(this);
         this._watchers.forEach(watcher => watcher(this));
     }
@@ -150,15 +153,15 @@ export class TaskScheduler {
         this._jobWatchers = [];
     }
 
-    static get instance() {
+    static get instance(): TaskScheduler {
         return TaskScheduler._instance;
     }
 
-    get name() {
+    get name(): string {
         return this._options.name;
     }
 
-    watch(watcher: JobWatcher) {
+    watch(watcher: JobWatcher): ThisType<this> {
         this._jobWatchers.push(watcher);
         return this;
     }
@@ -201,7 +204,7 @@ export class TaskScheduler {
     }
 
     /** @internal */
-    _onJobChange(job: Job) {
+    _onJobChange(job: Job): void {
         this._updateWatchers(job);
 
         if (job.finished) {
@@ -218,11 +221,12 @@ export class TaskScheduler {
         return job;
     }
 
-    private async _run() {
+    private async _run(): Promise<void> {
         const runningJobIds = Object.keys(this._runningJobs);
         let newJobsCount = this._options.maxJobs - runningJobIds.length;
         if (newJobsCount > 0) {
             while (newJobsCount-- && this._pendingJobs.length > 0) {
+                /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
                 const job = this._pendingJobs.shift()!;
                 this._runningJobs[job.id] = job;
                 job._execute();
@@ -230,7 +234,7 @@ export class TaskScheduler {
         }
     }
 
-    private _updateWatchers(job: Job) {
+    private _updateWatchers(job: Job): void {
         this._jobWatchers.forEach(watcher => watcher(job));
     }
 }
