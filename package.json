@@ -9,16 +9,21 @@
   "typings": "dist/main/index.d.ts",
   "license": "MIT",
   "scripts": {
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
     "compile:main": "tsc --project tsconfig.main.json",
     "compile:module": "tsc --project tsconfig.module.json",
-    "compile": "yarn compile:main && yarn compile:module"
+    "compile:browser": "webpack && webpack --env=production",
+    "compile": "yarn compile:main && yarn compile:module && yarn compile:browser"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^2.16.0",
     "@typescript-eslint/parser": "^2.16.0",
     "eslint": "^6.8.0",
-    "typescript": "^3.7.4"
+    "ts-loader": "^6.2.1",
+    "tsconfig-paths-webpack-plugin": "^3.2.0",
+    "typescript": "^3.7.4",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.3.10"
   },
   "files": [
     "dist",

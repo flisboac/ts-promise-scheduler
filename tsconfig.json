@@ -2,13 +2,15 @@
   "compilerOptions": {
     "target": "es6",
     "declaration": true,
+    "removeComments": false,
     "rootDir": "./src",
     "strict": true,
+    "baseUrl": "./",
+    "outDir": "./dist/out",
     "sourceMap": true,
-    "removeComments": true,
     "esModuleInterop": true,
   },
   "include": [
-    "**/*"
+    "src/**/*"
   ]
 }
